@@ -1,6 +1,6 @@
 ## How to develop using the Gemma2 model in Genkit
 
-On 2024/6/27, Google announced the open-source LLM Gemma2. This article introduces how to make requests to Gemma2 using Firebase Genkit.
+Google introduced Gemma2, an open-source LLM, in June 2024. This article introduces how to make requests to Gemma2 using Firebase Genkit.
 
 ## Step 1. Installing Ollama Gemma2
 
