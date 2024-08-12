@@ -120,7 +120,7 @@ export const menuSuggestionFlow = defineFlow(
 )
 ```
 
-## Local Launch
+## Run locally
 
 Start Genkit. The browser will launch when you run the following command.
 
