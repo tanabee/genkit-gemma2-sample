@@ -12,16 +12,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@genkit-ai/ai": "^0.5.8",
-    "@genkit-ai/core": "^0.5.8",
-    "@genkit-ai/dotprompt": "^0.5.8",
-    "@genkit-ai/flow": "^0.5.8",
-    "express": "^4.19.2",
-    "genkitx-ollama": "^0.5.8",
-    "zod": "^3.23.8"
-  },
   "devDependencies": {
-    "typescript": "^5.5.4"
+    "genkit-cli": "^0.9.1"
+  },
+  "dependencies": {
+    "@genkit-ai/googleai": "^0.9.1",
+    "genkit": "^0.9.1",
+    "genkitx-ollama": "^0.9.1"
   }
 }

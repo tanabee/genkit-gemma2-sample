@@ -1,3 +1,4 @@
 .vscode/
+.genkit/
 node_modules/
 lib/
