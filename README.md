@@ -27,105 +27,48 @@ Once the installation is successful, you can prompt Gemma2 from the command line
 Run the following commands to create a Genkit project. Choose `Ollama` when asked for the `model provider`.
 
 ```sh
-% mkdir genkit-gemma2-sample
-% cd genkit-gemma2-sample
-% genkit init
-
-? Select a runtime to initialize a Genkit project: (Use arrow keys)
-❯ Node.js
-? Select a runtime to initialize a Genkit project: Node.js
-? Select a deployment platform:
-  Firebase
-? Select a deployment platform: Other platforms
-? Select a model provider:
-  Google AI
-? Select a model provider: Ollama (e.g. Gemma)
-✔ Successfully initialized NPM project
-✔ Successfully installed NPM packages
-✔ Successfully updated tsconfig.json
-✔ Successfully updated package.json
-? Would you like to generate a sample flow? (Y/n) Y
-
-? Would you like to generate a sample flow? Yes
-✔ Successfully generated sample file (src/index.ts)
-If you don't have Ollama already installed and configured, refer to https://developers.google.com/genkit/plugins/ollama
-
-Genkit successfully initialized.
+% npm init -y
+% npm i -D genkit-cli
+% npm i genkit @genkit-ai/googleai genkitx-ollama
+% mkdir src && touch src/index.ts
 ```
 
 Once Genkit is installed, a sample code like the following will be generated in `src/index.ts`.
 
 ```typescript:src/index.ts
-import * as z from 'zod'
-
-import { generate } from '@genkit-ai/ai'
-import { configureGenkit } from '@genkit-ai/core'
-import { defineFlow, startFlowsServer } from '@genkit-ai/flow'
+import { genkit, z } from 'genkit'
 import { ollama } from 'genkitx-ollama'
 
-configureGenkit({
-  plugins: [
-    ollama({
-      models: [{ name: 'gemma' }],
-      serverAddress: 'http://127.0.0.1:11434',
-    }),
-  ],
-  logLevel: 'debug',
-  enableTracingAndMetrics: true,
-})
-
-export const menuSuggestionFlow = defineFlow(
-  {
-    name: 'menuSuggestionFlow',
-    inputSchema: z.string(),
-    outputSchema: z.string(),
-  },
-  async subject => {
-    const llmResponse = await generate({
-      prompt: `Suggest an item for the menu of a ${subject} themed restaurant`,
-      model: 'ollama/gemma',
-      config: {
-        temperature: 1,
-      },
-    })
-    return llmResponse.text()
-  }
-)
-
-startFlowsServer()
-```
-
-## Step 3. Connecting Genkit with Ollama Gemma2
-
-Simply replace `gemma` with `gemma2`, and you're done.
-
-```typescript:src/index.ts
-configureGenkit({
+const ai = genkit({
   plugins: [
     ollama({
       models: [{ name: 'gemma2' }],
       serverAddress: 'http://127.0.0.1:11434',
     }),
   ],
+  model: 'ollama/gemma2',
 })
 
-export const menuSuggestionFlow = defineFlow(
-  async subject => {
-    const llmResponse = await generate({
-      prompt: `Suggest an item for the menu of a ${subject} themed restaurant`,
-      model: 'ollama/gemma2',
-    })
-    return llmResponse.text()
+const mainFlow = ai.defineFlow(
+  {
+    name: 'mainFlow',
+    inputSchema: z.string(),
+  },
+  async input => {
+    const { text } = await ai.generate(input)
+    return text
   }
 )
+
+ai.startFlowServer({ flows: [mainFlow] })
 ```
 
-## Run locally
+## Step 3. Run locally
 
 Start Genkit. The browser will launch when you run the following command.
 
 ```sh
-% genkit start -o
+% npx genkit start -- npx tsx --watch src/index.ts
 ```
 
 ## Conclusion
